@@ -14,9 +14,29 @@ public class Main {
         record Message(String sender, String text) {}
         Map<String, List<Message>> conversations = new LinkedHashMap<>();
 
-        conversations
-                .computeIfAbsent("Alice Johnson", k -> new ArrayList<>())
-                .add(new Message("me", "Hey Alice!"));
+        // populate conversations
+        if (conversations.containsKey("Alice Johnson")) {
+            conversations.get("Alice Johnson").add(new Message("Alice Johnson", "Hey! How are you?"));
+        } else {
+            conversations.put("Alice Johnson", new ArrayList<>());
+            conversations.get("Alice Johnson").add(new Message("Alice Johnson", "Hey! How are you?"));
+        }
+
+        if (conversations.containsKey("Bob Smith")) {
+            conversations.get("Bob Smith").add(new Message("Bob Smith", "Hey! How are you?"));
+        } else {
+            conversations.put("Bob Smith", new ArrayList<>());
+            conversations.get("Bob Smith").add(new Message("Bob Smith", "Hey! How are you?"));
+        }
+
+        if (conversations.containsKey("Jeffrey Lee")) {
+            conversations.get("Jeffrey Lee").add(new Message("Jeffrey Lee", "Hey! How are you?"));
+        } else {
+            conversations.put("Jeffrey Lee", new ArrayList<>());
+            conversations.get("Jeffrey Lee").add(new Message("Jeffrey Lee", "Hey! How are you?"));
+        }
+
+
 
         JFrame frame = new JFrame("Messaging App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
