@@ -3,6 +3,7 @@ package io.github.ehteam.messaging;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -43,5 +44,17 @@ public class ProfilePage extends JPanel {
         form.add(phoneField);
 
         add(form, BorderLayout.CENTER);
+
+        JButton saveBtn = new JButton("Save");
+        saveBtn.addActionListener(e -> {
+            displayName = nameField.getText();
+            username = usernameField.getText();
+            bio = bioField.getText();
+            phone = phoneField.getText();
+        });
+
+        JPanel bottom = new JPanel();
+        bottom.add(saveBtn);
+        add(bottom, BorderLayout.SOUTH);
     }
 }
