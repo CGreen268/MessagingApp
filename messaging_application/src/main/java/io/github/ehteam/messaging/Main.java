@@ -48,7 +48,7 @@ public class Main {
         JTextField input = new JTextField();
         JButton sendButton = new JButton("Send");
 
-        messagePanel.add(new JSeparator(), SwingConstants.VERTICAL);
+        messagePanel.add(new JSeparator(SwingConstants.VERTICAL));
 
         frame.add(input, BorderLayout.SOUTH);
         frame.add(sendButton, BorderLayout.EAST);
