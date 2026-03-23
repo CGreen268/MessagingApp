@@ -1,6 +1,7 @@
 package io.github.ehteam.messaging;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,11 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.SwingUtilities;
 
 public class Main {
 
@@ -24,68 +23,85 @@ public class Main {
     private static JFrame frame = new JFrame("Messaging App");
 
     public static void main(String[] args) {
-        initializeConversations();
+        SwingUtilities.invokeLater(() -> {
+            initializeConversations();
 
-        DefaultListModel<String> messageModel = new DefaultListModel<>();
-        
+            DefaultListModel<String> messageModel = new DefaultListModel<>();
 
-        JPanel messagePanel = new JPanel(new BorderLayout());
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(600, 400);
+            frame.setLayout(new BorderLayout());
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setLayout(new BorderLayout());
+            CardLayout cardLayout = new CardLayout();
+            JPanel mainArea = new JPanel(cardLayout);
 
-        // Contact list on the left
-        contactList.setListData(conversations.keySet().toArray(new String[0]));
-        frame.add(contactList, BorderLayout.WEST);
+            // Chat panel
+            JPanel chatPanel = new JPanel(new BorderLayout());
 
-        // Message list in the center
-        JList<String> chats = new JList<>();
-        chats.setModel(messageModel);
-        frame.add(chats, BorderLayout.CENTER);
+            contactList.setListData(conversations.keySet().toArray(new String[0]));
+            frame.add(new JScrollPane(contactList), BorderLayout.WEST);
 
-        // Input field and send button at the bottom
-        JTextField input = new JTextField();
-        JButton sendButton = new JButton("Send");
+            JList<String> chats = new JList<>(messageModel);
+            chatPanel.add(new JScrollPane(chats), BorderLayout.CENTER);
 
-        messagePanel.add(new JSeparator(SwingConstants.VERTICAL));
+            JTextField input = new JTextField();
+            JButton sendButton = new JButton("Send");
 
-        frame.add(input, BorderLayout.SOUTH);
-        frame.add(sendButton, BorderLayout.EAST);
-        frame.add(sendButton, BorderLayout.EAST);
+            JPanel inputPanel = new JPanel(new BorderLayout());
+            inputPanel.add(input, BorderLayout.CENTER);
+            inputPanel.add(sendButton, BorderLayout.EAST);
 
-        
+            chatPanel.add(inputPanel, BorderLayout.SOUTH);
 
-        // Selection listener to load messages for selected contact
-        contactList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
+            // Profile page
+            ProfilePage profilePage = new ProfilePage();
+
+            mainArea.add(chatPanel, "chat");
+            mainArea.add(profilePage, "profile");
+
+            frame.add(mainArea, BorderLayout.CENTER);
+
+            JButton profileBtn = new JButton("Profile");
+            profileBtn.addActionListener(e -> {
+                if (profileBtn.getText().equals("Profile")) {
+                    cardLayout.show(mainArea, "profile");
+                    profileBtn.setText("Back");
+                } else {
+                    cardLayout.show(mainArea, "chat");
+                    profileBtn.setText("Profile");
+                }
+            });
+
+            frame.add(profileBtn, BorderLayout.NORTH);
+
+            // List selection
+            contactList.addListSelectionListener(e -> {
                 if (!e.getValueIsAdjusting()) {
                     String currentContact = contactList.getSelectedValue();
                     messageModel.clear();
                     if (currentContact != null) {
-                        List<Message> messages = conversations.get(currentContact);
-                        for (Message msg : messages) {
+                        for (Message msg : conversations.get(currentContact)) {
                             messageModel.addElement(msg.sender() + ": " + msg.text());
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Send button listener
-        sendButton.addActionListener(e -> {
-            String currentContact = contactList.getSelectedValue();
-            String text = input.getText().trim();
-            if (currentContact != null && !text.isEmpty()) {
-                Message msg = new Message("You", text);
-                conversations.get(currentContact).add(msg);
-                messageModel.addElement(msg.sender() + ": " + msg.text());
-                input.setText("");
-            }
-        });
+            // Send button
+            sendButton.addActionListener(e -> {
+                String currentContact = contactList.getSelectedValue();
+                String text = input.getText().trim();
 
-        frame.setVisible(true);
+                if (currentContact != null && !text.isEmpty()) {
+                    Message msg = new Message("You", text);
+                    conversations.get(currentContact).add(msg);
+                    messageModel.addElement(msg.sender() + ": " + msg.text());
+                    input.setText("");
+                }
+            });
+
+            frame.setVisible(true);
+        });
     }
 
     private static void initializeConversations() {

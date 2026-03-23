@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class ProfilePage extends JPanel {
 
@@ -27,11 +28,11 @@ public class ProfilePage extends JPanel {
     public ProfilePage() {
         setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("My Profile");
+        JLabel title = new JLabel("My Profile", SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 16));
         add(title, BorderLayout.NORTH);
 
-        JPanel form = new JPanel(new GridLayout(0, 2, 5, 5));
+        JPanel form = new JPanel(new GridLayout(0, 2, 10, 10));
 
         nameField = new JTextField(displayName);
         usernameField = new JTextField(username);
@@ -57,6 +58,7 @@ public class ProfilePage extends JPanel {
             username = usernameField.getText();
             bio = bioField.getText();
             phone = phoneField.getText();
+
             JOptionPane.showMessageDialog(this, "Profile saved!");
         });
 
