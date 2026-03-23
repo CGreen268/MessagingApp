@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -32,6 +33,8 @@ public class ProfilePage extends JPanel {
         nameField = new JTextField(displayName);
         usernameField = new JTextField(username);
         bioField = new JTextArea(bio, 3, 20);
+        bioField.setLineWrap(true);
+        bioField.setWrapStyleWord(true);
         phoneField = new JTextField(phone);
 
         form.add(new JLabel("Name:"));
@@ -39,7 +42,7 @@ public class ProfilePage extends JPanel {
         form.add(new JLabel("Username:"));
         form.add(usernameField);
         form.add(new JLabel("Bio:"));
-        form.add(bioField);
+        form.add(new JScrollPane(bioField));
         form.add(new JLabel("Phone:"));
         form.add(phoneField);
 
