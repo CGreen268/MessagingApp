@@ -31,7 +31,24 @@ public class ContactLinkedList {
         size++;
     }
 
-    
+    public void moveToHead(String name) {
+        if (head == null || head.name.equals(name)) return;
+
+        Node prev = null;
+        Node cur = head;
+
+        while (cur != null && !cur.name.equals(name)) {
+            prev = cur;
+            cur = cur.next;
+        }
+
+        if (cur == null) return;
+
+        prev.next = cur.next;
+        cur.next = head;
+        head = cur;
+    }
+
     public Node find(String name) {
         Node cur = head;
         while (cur != null) {
@@ -45,4 +62,13 @@ public class ContactLinkedList {
 
     public int size() { return size; }
 
+    public String[] toArray() {
+        String[] result = new String[size];
+        Node cur = head;
+        for (int i = 0; i < size; i++) {
+            result[i] = cur.name;
+            cur = cur.next;
+        }
+        return result;
+    }
 }
