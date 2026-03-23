@@ -98,22 +98,4 @@ public class Main {
         contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! How are you?"));
         contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hey! How are you?"));
     }
-
-    private static class Message {
-        private String sender;
-        private String content;
-
-        public Message(String sender, String content) {
-            this.sender = sender;
-            this.content = content;
-        }
-
-        public String sender() {
-            return sender;
-        }
-
-        public String text() {
-            return content;
-        }
-    }
 }
