@@ -84,7 +84,7 @@ public class Main {
             removeContactBtn.addActionListener(e -> {
                 String selected = contactList.getSelectedValue();
                 if (selected != null) {
-                    rebuildWithout(selected);
+                    contacts.remove(selected);
                     contactModel.removeElement(selected);
                     messageModel.clear();
                 }
@@ -151,15 +151,5 @@ public class Main {
         contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "Hey! How are you?"));
         contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! How are you?"));
         contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hey! How are you?"));
-    }
-
-    private static void rebuildWithout(String name) {
-        String[] all = contacts.toArray();
-        contacts = new ContactLinkedList();
-        for (String n : all) {
-            if (!n.equals(name)) {
-                contacts.addToTail(n);
-            }
-        }
     }
 }
