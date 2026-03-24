@@ -204,12 +204,14 @@ public class Main {
         });
     }
 
-    private static void refreshContactModel() {
-        contactModel.clear();
-        for (String name : contacts.toArray()) {
+    private static void refreshContactModel(String filter) {
+    contactModel.clear();
+    for (String name : contacts.toArray()) {
+        if (filter == null || name.toLowerCase().contains(filter.toLowerCase())) {
             contactModel.addElement(name);
         }
     }
+}
 
     private static void initializeConversations() {
         contacts.addToTail("Alice Johnson");
