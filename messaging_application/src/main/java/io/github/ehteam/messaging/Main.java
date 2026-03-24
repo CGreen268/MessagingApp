@@ -185,6 +185,14 @@ public class Main {
 
             topPanel.add(searchPanel, BorderLayout.CENTER);
 
+            // search field for messages
+            JTextField messageSearchField = new JTextField();
+            JLabel messageSearchLabel = new JLabel("Search messages:");
+
+            JPanel messageSearchPanel = new JPanel(new BorderLayout(5, 0));
+            messageSearchPanel.add(messageSearchLabel, BorderLayout.WEST);
+            messageSearchPanel.add(messageSearchField, BorderLayout.CENTER);
+
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
