@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class Main {
 
@@ -75,9 +75,19 @@ public class Main {
             frame.add(mainArea, BorderLayout.CENTER);
 
             JButton newContactBtn = new JButton("New Contact");
+            JButton removeContactBtn = new JButton("Remove Contact");
             newContactBtn.addActionListener(e -> {
                 profilePage[0].clearFields();
                 cardLayout.show(mainArea, "profile");
+            });
+
+            removeContactBtn.addActionListener(e -> {
+                String selected = contactList.getSelectedValue();
+                if (selected != null) {
+                    rebuildWithout(selected);
+                    contactModel.removeElement(selected);
+                    messageModel.clear();
+                }
             });
 
             JButton profileBtn = new JButton("Profile");
@@ -85,7 +95,10 @@ public class Main {
 
             JPanel topPanel = new JPanel(new BorderLayout());
             topPanel.add(profileBtn, BorderLayout.EAST);
-            topPanel.add(newContactBtn, BorderLayout.WEST);
+            JPanel leftButtons = new JPanel();
+            leftButtons.add(newContactBtn);
+            leftButtons.add(removeContactBtn);
+            topPanel.add(leftButtons, BorderLayout.WEST);
             frame.add(topPanel, BorderLayout.NORTH);
 
             contactList.addListSelectionListener(new ListSelectionListener() {
@@ -138,5 +151,15 @@ public class Main {
         contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "Hey! How are you?"));
         contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! How are you?"));
         contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hey! How are you?"));
+    }
+
+    private static void rebuildWithout(String name) {
+        String[] all = contacts.toArray();
+        contacts = new ContactLinkedList();
+        for (String n : all) {
+            if (!n.equals(name)) {
+                contacts.addToTail(n);
+            }
+        }
     }
 }
