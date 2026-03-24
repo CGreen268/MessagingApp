@@ -195,12 +195,17 @@ public class Main {
 
             chatPanel.add(messageSearchPanel, BorderLayout.NORTH);
 
+            messageSearchField.addActionListener(e -> {
+                String currentContact = contactList.getSelectedValue();
+                refreshMessages(currentContact, messageSearchField.getText(), messageModel);
+            });
 
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
                     if (!e.getValueIsAdjusting()) {
                         String currentContact = contactList.getSelectedValue();
+                        refreshMessages(currentContact, messageSearchField.getText(), messageModel);
                         messageModel.clear();
                         if (currentContact != null) {
                             ContactLinkedList.Node node = contacts.find(currentContact);
@@ -212,8 +217,6 @@ public class Main {
                     }
                 }
             });
-
-            
 
             sendButton.addActionListener(e -> {
                 String currentContact = contactList.getSelectedValue();
@@ -255,21 +258,23 @@ public class Main {
     }
 
     private static void refreshMessages(String contactName, String filter, DefaultListModel<String> messageModel) {
-    messageModel.clear();
+        messageModel.clear();
 
-    if (contactName == null) return;
+        if (contactName == null) {
+            return;
+        }
 
-    ContactLinkedList.Node node = contacts.find(contactName);
+        ContactLinkedList.Node node = contacts.find(contactName);
 
-    for (Object obj : node.messages) {
-        Message msg = (Message) obj;
+        for (Object obj : node.messages) {
+            Message msg = (Message) obj;
 
-        String fullText = msg.sender() + ": " + msg.text();
+            String fullText = msg.sender() + ": " + msg.text();
 
-        if (filter == null || filter.isEmpty()
-                || fullText.toLowerCase().contains(filter.toLowerCase())) {
-            messageModel.addElement(fullText);
+            if (filter == null || filter.isEmpty()
+                    || fullText.toLowerCase().contains(filter.toLowerCase())) {
+                messageModel.addElement(fullText);
+            }
         }
     }
-}
 }
