@@ -69,13 +69,42 @@ public class Main {
             profilePanel.add(backButton, BorderLayout.NORTH);
             profilePanel.add(profilePage[0], BorderLayout.CENTER);
 
+// Contact profile page
+            ContactProfile[] contactProfilePage = new ContactProfile[1];
+            contactProfilePage[0] = new ContactProfile(
+                    () -> {
+                        // Save button — update the node's details
+                        String selected = contactList.getSelectedValue();
+                        if (selected != null) {
+                            ContactLinkedList.Node node = contacts.find(selected);
+                            if (node != null) {
+                                String newName = contactProfilePage[0].getContactName();
+                                node.name = newName;
+                                node.username = contactProfilePage[0].getContactUsername();
+                                node.bio = contactProfilePage[0].getContactBio();
+                                node.phone = contactProfilePage[0].getContactPhone();
+                                refreshContactModel();
+                                contactList.setSelectedValue(newName, true);
+                            }
+                        }
+                        cardLayout.show(mainArea, "chat");
+                    },
+                    () -> cardLayout.show(mainArea, "chat") // Cancel button
+            );
+
+            JPanel contactProfilePanel = new JPanel(new BorderLayout());
+            contactProfilePanel.add(contactProfilePage[0], BorderLayout.CENTER);
+
             mainArea.add(chatPanel, "chat");
             mainArea.add(profilePanel, "profile");
+            mainArea.add(contactProfilePanel, "contactProfile");
 
             frame.add(mainArea, BorderLayout.CENTER);
 
             JButton newContactBtn = new JButton("New Contact");
             JButton removeContactBtn = new JButton("Remove Contact");
+            JButton viewContactBtn = new JButton("View Profile");
+
             newContactBtn.addActionListener(e -> {
                 profilePage[0].clearFields();
                 cardLayout.show(mainArea, "profile");
@@ -90,6 +119,15 @@ public class Main {
                 }
             });
 
+            viewContactBtn.addActionListener(e -> {
+                String selected = contactList.getSelectedValue();
+                if (selected != null) {
+                    ContactLinkedList.Node node = contacts.find(selected);
+                    contactProfilePage[0].loadContact(node);
+                    cardLayout.show(mainArea, "contactProfile");
+                }
+            });
+
             JButton profileBtn = new JButton("Profile");
             profileBtn.addActionListener(e -> cardLayout.show(mainArea, "profile"));
 
@@ -98,6 +136,7 @@ public class Main {
             JPanel leftButtons = new JPanel();
             leftButtons.add(newContactBtn);
             leftButtons.add(removeContactBtn);
+            leftButtons.add(viewContactBtn);
             topPanel.add(leftButtons, BorderLayout.WEST);
             frame.add(topPanel, BorderLayout.NORTH);
 
