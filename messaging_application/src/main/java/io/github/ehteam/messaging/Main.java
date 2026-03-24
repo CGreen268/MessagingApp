@@ -193,6 +193,9 @@ public class Main {
             messageSearchPanel.add(messageSearchLabel, BorderLayout.WEST);
             messageSearchPanel.add(messageSearchField, BorderLayout.CENTER);
 
+            chatPanel.add(messageSearchPanel, BorderLayout.NORTH);
+
+
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -209,6 +212,8 @@ public class Main {
                     }
                 }
             });
+
+            
 
             sendButton.addActionListener(e -> {
                 String currentContact = contactList.getSelectedValue();
@@ -248,4 +253,23 @@ public class Main {
         contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! How are you?"));
         contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hey! How are you?"));
     }
+
+    private static void refreshMessages(String contactName, String filter, DefaultListModel<String> messageModel) {
+    messageModel.clear();
+
+    if (contactName == null) return;
+
+    ContactLinkedList.Node node = contacts.find(contactName);
+
+    for (Object obj : node.messages) {
+        Message msg = (Message) obj;
+
+        String fullText = msg.sender() + ": " + msg.text();
+
+        if (filter == null || filter.isEmpty()
+                || fullText.toLowerCase().contains(filter.toLowerCase())) {
+            messageModel.addElement(fullText);
+        }
+    }
+}
 }
