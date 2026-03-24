@@ -198,6 +198,8 @@ public class Main {
                 }
             });
 
+            input.addActionListener(e -> sendButton.doClick());
+
             frame.setVisible(true);
         });
     }
