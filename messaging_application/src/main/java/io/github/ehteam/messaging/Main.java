@@ -6,6 +6,7 @@ import java.awt.CardLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -13,8 +14,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import com.sun.java.accessibility.util.TopLevelWindowListener;
 
 public class Main {
 
@@ -177,6 +176,14 @@ public class Main {
                 String text = searchField.getText();
                 refreshContactModel(text);
             });
+
+            JLabel searchLabel = new JLabel("Search Contacts:");
+
+            JPanel searchPanel = new JPanel(new BorderLayout());
+            searchPanel.add(searchLabel, BorderLayout.WEST);
+            searchPanel.add(searchField, BorderLayout.CENTER);
+
+            topPanel.add(searchPanel, BorderLayout.CENTER);
 
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
