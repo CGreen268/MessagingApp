@@ -52,8 +52,10 @@ public class Main {
 
             JTextField input = new JTextField();
             JButton sendButton = new JButton("Send");
+            JTextField sendLabel = new JTextField("Send Message");
 
             JPanel inputPanel = new JPanel(new BorderLayout());
+            inputPanel.add(sendLabel, BorderLayout.WEST);
             inputPanel.add(input, BorderLayout.CENTER);
             inputPanel.add(sendButton, BorderLayout.EAST);
 
