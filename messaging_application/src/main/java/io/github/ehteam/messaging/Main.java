@@ -14,6 +14,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.sun.java.accessibility.util.TopLevelWindowListener;
+
 public class Main {
 
     private static ContactLinkedList contacts = new ContactLinkedList();
@@ -42,7 +44,7 @@ public class Main {
             JPanel chatPanel = new JPanel(new BorderLayout());
 
             contactList.setModel(contactModel);
-            refreshContactModel();
+            refreshContactModel(null);
             frame.add(new JScrollPane(contactList), BorderLayout.WEST);
 
             JList<String> chats = new JList<>();
@@ -64,7 +66,7 @@ public class Main {
                 String name = profilePage[0].getDisplayName();
                 if (!name.isEmpty() && contacts.find(name) == null) {
                     contacts.addToTail(name);
-                    refreshContactModel();
+                    refreshContactModel(null);
                 }
                 cardLayout.show(mainArea, "chat");
             }, "New Contact");
@@ -104,7 +106,7 @@ public class Main {
                                 node.name = newName;
                                 node.bio = contactProfilePage[0].getContactBio();
                                 node.phone = contactProfilePage[0].getContactPhone();
-                                refreshContactModel();
+                                refreshContactModel(null);
                                 contactList.setSelectedValue(newName, true);
                             }
                         }
@@ -126,6 +128,7 @@ public class Main {
             JButton newContactBtn = new JButton("New Contact");
             JButton removeContactBtn = new JButton("Remove Contact");
             JButton viewContactBtn = new JButton("View Profile");
+            
 
             newContactBtn.addActionListener(e -> {
                 profilePage[0].clearFields();
@@ -167,6 +170,10 @@ public class Main {
             topPanel.add(leftButtons, BorderLayout.WEST);
             frame.add(topPanel, BorderLayout.NORTH);
 
+            // search bar for contacts
+            JTextField searchField = new JTextField();
+            topPanel.add(searchField, BorderLayout.CENTER);
+
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -193,7 +200,7 @@ public class Main {
                     messageModel.addElement(msg.sender() + ": " + msg.text());
                     input.setText("");
                     contacts.moveToHead(currentContact);
-                    refreshContactModel();
+                    refreshContactModel(null);
                     contactList.setSelectedValue(currentContact, true);
                 }
             });
