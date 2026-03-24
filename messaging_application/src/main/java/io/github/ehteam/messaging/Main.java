@@ -22,7 +22,7 @@ public class Main {
     private static DefaultListModel<String> contactModel = new DefaultListModel<>();
     private static JList<String> contactList = new JList<>();
     private static JFrame frame = new JFrame("Messaging App");
-    
+
     // User's own profile
     private static String userProfileName = "You";
     private static String userProfileBio = "Hey there! I'm using MessagingApp.";
@@ -128,7 +128,6 @@ public class Main {
             JButton newContactBtn = new JButton("New Contact");
             JButton removeContactBtn = new JButton("Remove Contact");
             JButton viewContactBtn = new JButton("View Profile");
-            
 
             newContactBtn.addActionListener(e -> {
                 profilePage[0].clearFields();
@@ -174,6 +173,11 @@ public class Main {
             JTextField searchField = new JTextField();
             topPanel.add(searchField, BorderLayout.CENTER);
 
+            searchField.addActionListener(e -> {
+                String text = searchField.getText();
+                refreshContactModel(text);
+            });
+
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -212,13 +216,13 @@ public class Main {
     }
 
     private static void refreshContactModel(String filter) {
-    contactModel.clear();
-    for (String name : contacts.toArray()) {
-        if (filter == null || name.toLowerCase().contains(filter.toLowerCase())) {
-            contactModel.addElement(name);
+        contactModel.clear();
+        for (String name : contacts.toArray()) {
+            if (filter == null || name.toLowerCase().contains(filter.toLowerCase())) {
+                contactModel.addElement(name);
+            }
         }
     }
-}
 
     private static void initializeConversations() {
         contacts.addToTail("Alice Johnson");
