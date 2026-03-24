@@ -63,8 +63,14 @@ public class Main {
                 cardLayout.show(mainArea, "chat");
             });
 
+            JPanel profilePanel = new JPanel(new BorderLayout());
+            JButton backButton = new JButton("Back");
+            backButton.addActionListener(e -> cardLayout.show(mainArea, "chat"));
+            profilePanel.add(backButton, BorderLayout.NORTH);
+            profilePanel.add(profilePage[0], BorderLayout.CENTER);
+
             mainArea.add(chatPanel, "chat");
-            mainArea.add(profilePage[0], "profile");
+            mainArea.add(profilePanel, "profile");
 
             frame.add(mainArea, BorderLayout.CENTER);
 
@@ -75,15 +81,7 @@ public class Main {
             });
 
             JButton profileBtn = new JButton("Profile");
-            profileBtn.addActionListener(e -> {
-                if (profileBtn.getText().equals("Profile")) {
-                    cardLayout.show(mainArea, "profile");
-                    profileBtn.setText("Profile");
-                } else {
-                    cardLayout.show(mainArea, "chat");
-                    profileBtn.setText("Back");
-                }
-            });
+            profileBtn.addActionListener(e -> cardLayout.show(mainArea, "profile"));
 
             JPanel topPanel = new JPanel(new BorderLayout());
             topPanel.add(profileBtn, BorderLayout.EAST);
