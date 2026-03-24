@@ -2,10 +2,6 @@ package io.github.ehteam.messaging;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -38,7 +34,6 @@ public class Main {
             CardLayout cardLayout = new CardLayout();
             JPanel mainArea = new JPanel(cardLayout);
 
-            // Chat panel
             JPanel chatPanel = new JPanel(new BorderLayout());
 
             contactList.setModel(contactModel);
@@ -58,17 +53,24 @@ public class Main {
 
             chatPanel.add(inputPanel, BorderLayout.SOUTH);
 
-            // Profile page
-            ProfilePage profilePage = new ProfilePage();
+            ProfilePage[] profilePage = new ProfilePage[1];
+            profilePage[0] = new ProfilePage(() -> {
+                String name = profilePage[0].getDisplayName();
+                if (!name.isEmpty() && contacts.find(name) == null) {
+                    contacts.addToTail(name);
+                    refreshContactModel();
+                }
+                cardLayout.show(mainArea, "chat");
+            });
 
             mainArea.add(chatPanel, "chat");
-            mainArea.add(profilePage, "profile");
+            mainArea.add(profilePage[0], "profile");
 
             frame.add(mainArea, BorderLayout.CENTER);
 
             JButton newContactBtn = new JButton("New Contact");
             newContactBtn.addActionListener(e -> {
-                profilePage.clearFields();
+                profilePage[0].clearFields();
                 cardLayout.show(mainArea, "profile");
             });
 
@@ -83,9 +85,11 @@ public class Main {
                 }
             });
 
-            frame.add(profileBtn, BorderLayout.NORTH);
+            JPanel topPanel = new JPanel(new BorderLayout());
+            topPanel.add(profileBtn, BorderLayout.EAST);
+            topPanel.add(newContactBtn, BorderLayout.WEST);
+            frame.add(topPanel, BorderLayout.NORTH);
 
-            // List selection
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -103,7 +107,6 @@ public class Main {
                 }
             });
 
-            // Send button
             sendButton.addActionListener(e -> {
                 String currentContact = contactList.getSelectedValue();
                 String text = input.getText().trim();

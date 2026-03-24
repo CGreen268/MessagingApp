@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -25,7 +24,7 @@ public class ProfilePage extends JPanel {
     private JTextArea bioField;
     private JTextField phoneField;
 
-    public ProfilePage() {
+    public ProfilePage(Runnable onSave) {
         setLayout(new BorderLayout());
 
         JLabel title = new JLabel("My Profile", SwingConstants.CENTER);
@@ -58,8 +57,7 @@ public class ProfilePage extends JPanel {
             username = usernameField.getText();
             bio = bioField.getText();
             phone = phoneField.getText();
-
-            JOptionPane.showMessageDialog(this, "Profile saved!");
+            onSave.run();
         });
 
         JPanel bottom = new JPanel();
