@@ -66,6 +66,12 @@ public class Main {
 
             frame.add(mainArea, BorderLayout.CENTER);
 
+            JButton newContactBtn = new JButton("New Contact");
+            newContactBtn.addActionListener(e -> {
+                profilePage.clearFields();
+                cardLayout.show(mainArea, "profile");
+            });
+
             JButton profileBtn = new JButton("Profile");
             profileBtn.addActionListener(e -> {
                 if (profileBtn.getText().equals("Profile")) {

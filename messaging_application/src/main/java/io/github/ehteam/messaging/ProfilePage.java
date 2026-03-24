@@ -66,4 +66,15 @@ public class ProfilePage extends JPanel {
         bottom.add(saveBtn);
         add(bottom, BorderLayout.SOUTH);
     }
+
+    public void clearFields() {
+        nameField.setText("");
+        usernameField.setText("");
+        bioField.setText("");
+        phoneField.setText("");
+    }
+
+    public String getDisplayName() {
+        return nameField.getText().trim();
+    }
 }
