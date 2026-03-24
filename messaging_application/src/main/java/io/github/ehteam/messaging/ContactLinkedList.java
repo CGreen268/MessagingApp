@@ -6,16 +6,21 @@ import java.util.List;
 public class ContactLinkedList {
 
     public static class Node {
+    public String name;
+    public String username;
+    public String bio;
+    public String phone;
+    public List<Object> messages;
+    public Node next;
 
-        public String name;
-        public List<Object> messages;
-        public Node next;
-
-        public Node(String name) {
-            this.name = name;
-            this.messages = new ArrayList<>();
-        }
+    public Node(String name) {
+        this.name = name;
+        this.username = "";
+        this.bio = "";
+        this.phone = "";
+        this.messages = new ArrayList<>();
     }
+}
 
     private Node head;
     private int size;
