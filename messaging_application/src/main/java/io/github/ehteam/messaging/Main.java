@@ -80,7 +80,6 @@ public class Main {
                             if (node != null) {
                                 String newName = contactProfilePage[0].getContactName();
                                 node.name = newName;
-                                node.username = contactProfilePage[0].getContactUsername();
                                 node.bio = contactProfilePage[0].getContactBio();
                                 node.phone = contactProfilePage[0].getContactPhone();
                                 refreshContactModel();

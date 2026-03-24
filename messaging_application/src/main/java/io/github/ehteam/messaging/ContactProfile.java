@@ -29,16 +29,13 @@ public class ContactProfile extends JPanel {
         JPanel form = new JPanel(new GridLayout(0, 2, 10, 10));
 
         nameField = new JTextField();
-        usernameField = new JTextField();
         bioField = new JTextArea(3, 20);
         bioField.setLineWrap(true);
         bioField.setWrapStyleWord(true);
         phoneField = new JTextField();
 
-        form.add(new JLabel("Name:"));
+        form.add(new JLabel("Full Name:"));
         form.add(nameField);
-        form.add(new JLabel("Username:"));
-        form.add(usernameField);
         form.add(new JLabel("Bio:"));
         form.add(new JScrollPane(bioField));
         form.add(new JLabel("Phone:"));
@@ -60,13 +57,11 @@ public class ContactProfile extends JPanel {
 
     public void loadContact(ContactLinkedList.Node node) {
         nameField.setText(node.name);
-        usernameField.setText(node.username);
         bioField.setText(node.bio);
         phoneField.setText(node.phone);
     }
 
     public String getContactName()     { return nameField.getText().trim(); }
-    public String getContactUsername() { return usernameField.getText().trim(); }
     public String getContactBio()      { return bioField.getText().trim(); }
     public String getContactPhone()    { return phoneField.getText().trim(); }
 }

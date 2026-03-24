@@ -15,26 +15,23 @@ import javax.swing.SwingConstants;
 public class ProfilePage extends JPanel {
 
     private String displayName = "Jane Doe";
-    private String username = "janedoe";
     private String bio = "Hey there! I'm using MessagingApp.";
     private String phone = "+44 7700 900123";
 
     private JTextField nameField;
-    private JTextField usernameField;
     private JTextArea bioField;
     private JTextField phoneField;
 
     public ProfilePage(Runnable onSave) {
         setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("My Profile", SwingConstants.CENTER);
+        JLabel title = new JLabel("New Contact", SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 16));
         add(title, BorderLayout.NORTH);
 
         JPanel form = new JPanel(new GridLayout(0, 2, 10, 10));
 
         nameField = new JTextField(displayName);
-        usernameField = new JTextField(username);
         bioField = new JTextArea(bio, 3, 20);
         bioField.setLineWrap(true);
         bioField.setWrapStyleWord(true);
@@ -42,8 +39,6 @@ public class ProfilePage extends JPanel {
 
         form.add(new JLabel("Name:"));
         form.add(nameField);
-        form.add(new JLabel("Username:"));
-        form.add(usernameField);
         form.add(new JLabel("Bio:"));
         form.add(new JScrollPane(bioField));
         form.add(new JLabel("Phone:"));
@@ -54,7 +49,6 @@ public class ProfilePage extends JPanel {
         JButton saveBtn = new JButton("Save");
         saveBtn.addActionListener(e -> {
             displayName = nameField.getText();
-            username = usernameField.getText();
             bio = bioField.getText();
             phone = phoneField.getText();
             onSave.run();
@@ -67,7 +61,6 @@ public class ProfilePage extends JPanel {
 
     public void clearFields() {
         nameField.setText("");
-        usernameField.setText("");
         bioField.setText("");
         phoneField.setText("");
     }
