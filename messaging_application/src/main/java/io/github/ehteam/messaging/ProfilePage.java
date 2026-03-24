@@ -23,11 +23,15 @@ public class ProfilePage extends JPanel {
     private JTextField phoneField;
 
     public ProfilePage(Runnable onSave) {
+        this(onSave, "New Contact");
+    }
+
+    public ProfilePage(Runnable onSave, String title) {
         setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("New Contact", SwingConstants.CENTER);
-        title.setFont(new Font("SansSerif", Font.BOLD, 16));
-        add(title, BorderLayout.NORTH);
+        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        add(titleLabel, BorderLayout.NORTH);
 
         JPanel form = new JPanel(new GridLayout(0, 2, 10, 10));
 
@@ -67,5 +71,25 @@ public class ProfilePage extends JPanel {
 
     public String getDisplayName() {
         return nameField.getText().trim();
+    }
+
+    public String getContactBio() {
+        return bioField.getText().trim();
+    }
+
+    public String getContactPhone() {
+        return phoneField.getText().trim();
+    }
+
+    public void setDisplayName(String name) {
+        nameField.setText(name);
+    }
+
+    public void setContactBio(String bio) {
+        bioField.setText(bio);
+    }
+
+    public void setContactPhone(String phone) {
+        phoneField.setText(phone);
     }
 }

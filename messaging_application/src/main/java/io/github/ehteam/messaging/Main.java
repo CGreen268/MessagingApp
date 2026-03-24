@@ -20,6 +20,11 @@ public class Main {
     private static DefaultListModel<String> contactModel = new DefaultListModel<>();
     private static JList<String> contactList = new JList<>();
     private static JFrame frame = new JFrame("Messaging App");
+    
+    // User's own profile
+    private static String userProfileName = "You";
+    private static String userProfileBio = "Hey there! I'm using MessagingApp.";
+    private static String userProfilePhone = "+1 555 123 4567";
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -53,6 +58,7 @@ public class Main {
 
             chatPanel.add(inputPanel, BorderLayout.SOUTH);
 
+            // New Contact profile page
             ProfilePage[] profilePage = new ProfilePage[1];
             profilePage[0] = new ProfilePage(() -> {
                 String name = profilePage[0].getDisplayName();
@@ -61,13 +67,29 @@ public class Main {
                     refreshContactModel();
                 }
                 cardLayout.show(mainArea, "chat");
-            });
+            }, "New Contact");
 
             JPanel profilePanel = new JPanel(new BorderLayout());
             JButton backButton = new JButton("Back");
             backButton.addActionListener(e -> cardLayout.show(mainArea, "chat"));
             profilePanel.add(backButton, BorderLayout.NORTH);
             profilePanel.add(profilePage[0], BorderLayout.CENTER);
+
+            // User's own profile page
+            ProfilePage[] userProfilePage = new ProfilePage[1];
+            userProfilePage[0] = new ProfilePage(() -> {
+                // Save user's own profile
+                userProfileName = userProfilePage[0].getDisplayName();
+                userProfileBio = userProfilePage[0].getContactBio();
+                userProfilePhone = userProfilePage[0].getContactPhone();
+                cardLayout.show(mainArea, "chat");
+            }, "Profile");
+
+            JPanel userProfilePanel = new JPanel(new BorderLayout());
+            JButton userBackButton = new JButton("Back");
+            userBackButton.addActionListener(e -> cardLayout.show(mainArea, "chat"));
+            userProfilePanel.add(userBackButton, BorderLayout.NORTH);
+            userProfilePanel.add(userProfilePage[0], BorderLayout.CENTER);
 
 // Contact profile page
             ContactProfile[] contactProfilePage = new ContactProfile[1];
@@ -96,6 +118,7 @@ public class Main {
 
             mainArea.add(chatPanel, "chat");
             mainArea.add(profilePanel, "profile");
+            mainArea.add(userProfilePanel, "userProfile");
             mainArea.add(contactProfilePanel, "contactProfile");
 
             frame.add(mainArea, BorderLayout.CENTER);
@@ -128,7 +151,12 @@ public class Main {
             });
 
             JButton profileBtn = new JButton("Profile");
-            profileBtn.addActionListener(e -> cardLayout.show(mainArea, "profile"));
+            profileBtn.addActionListener(e -> {
+                userProfilePage[0].setDisplayName(userProfileName);
+                userProfilePage[0].setContactBio(userProfileBio);
+                userProfilePage[0].setContactPhone(userProfilePhone);
+                cardLayout.show(mainArea, "userProfile");
+            });
 
             JPanel topPanel = new JPanel(new BorderLayout());
             topPanel.add(profileBtn, BorderLayout.EAST);
