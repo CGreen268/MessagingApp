@@ -247,7 +247,8 @@ public class Main {
                             ContactLinkedList.Node node = contacts.find(currentContact);
                             for (Object obj : node.messages) {
                                 Message msg = (Message) obj;
-                                messageModel.addElement(msg.sender() + ": " + msg.text());
+                                String readStatus = msg.isRead() ? "✓ Read" : "● Unread";
+                                messageModel.addElement("[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")");
                             }
                         }
                     }
@@ -260,7 +261,8 @@ public class Main {
                 if (currentContact != null && !text.isEmpty()) {
                     Message msg = new Message("You", text, false);
                     contacts.find(currentContact).messages.add(msg);
-                    messageModel.addElement(msg.sender() + ": " + msg.text());
+                    String readStatus = msg.isRead() ? "✓ Read" : "● Unread";
+                    messageModel.addElement("[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")");
                     input.setText("");
                     contacts.moveToHead(currentContact);
                     refreshContactModel(null);
@@ -311,7 +313,12 @@ public class Main {
         for (Object obj : node.messages) {
             Message msg = (Message) obj;
 
-            String fullText = msg.sender() + ": " + msg.text();
+            String readStatus = "Unread";
+            if (msg.isRead()) {
+                readStatus = "Read";
+            }
+            
+            String fullText = "[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")";
 
             if (filter == null || filter.isEmpty()
                     || fullText.toLowerCase().contains(filter.toLowerCase())) {
