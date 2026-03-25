@@ -2,7 +2,9 @@ package io.github.ehteam.messaging;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,10 +12,40 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+class WrappingListCellRenderer extends DefaultListCellRenderer {
+    private JTextArea textArea;
+
+    public WrappingListCellRenderer() {
+        textArea = new JTextArea();
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setOpaque(true);
+    }
+
+    @Override
+    public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+            boolean isSelected, boolean cellHasFocus) {
+        String text = (value == null) ? "" : value.toString();
+        textArea.setText(text);
+        textArea.setSize(list.getWidth(), Integer.MAX_VALUE);
+        textArea.setPreferredSize(null);
+        int height = textArea.getPreferredSize().height;
+        if (height < 20) {
+            height = 20;
+        }
+
+        textArea.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+        textArea.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+
+        return textArea;
+    }
+}
 
 public class Main {
 
@@ -48,6 +80,8 @@ public class Main {
 
             JList<String> chats = new JList<>();
             chats.setModel(messageModel);
+            chats.setCellRenderer(new WrappingListCellRenderer());
+            chats.setFixedCellHeight(-1);
             chatPanel.add(new JScrollPane(chats), BorderLayout.CENTER);
 
             JTextField input = new JTextField();
