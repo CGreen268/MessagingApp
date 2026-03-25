@@ -6,6 +6,7 @@ import java.awt.CardLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,7 +21,7 @@ public class Main {
     private static DefaultListModel<String> contactModel = new DefaultListModel<>();
     private static JList<String> contactList = new JList<>();
     private static JFrame frame = new JFrame("Messaging App");
-    
+
     // User's own profile
     private static String userProfileName = "You";
     private static String userProfileBio = "Hey there! I'm using MessagingApp.";
@@ -42,7 +43,7 @@ public class Main {
             JPanel chatPanel = new JPanel(new BorderLayout());
 
             contactList.setModel(contactModel);
-            refreshContactModel();
+            refreshContactModel(null);
             frame.add(new JScrollPane(contactList), BorderLayout.WEST);
 
             JList<String> chats = new JList<>();
@@ -51,8 +52,10 @@ public class Main {
 
             JTextField input = new JTextField();
             JButton sendButton = new JButton("Send");
+            JTextField sendLabel = new JTextField("Send Message");
 
             JPanel inputPanel = new JPanel(new BorderLayout());
+            inputPanel.add(sendLabel, BorderLayout.WEST);
             inputPanel.add(input, BorderLayout.CENTER);
             inputPanel.add(sendButton, BorderLayout.EAST);
 
@@ -64,7 +67,7 @@ public class Main {
                 String name = profilePage[0].getDisplayName();
                 if (!name.isEmpty() && contacts.find(name) == null) {
                     contacts.addToTail(name);
-                    refreshContactModel();
+                    refreshContactModel(null);
                 }
                 cardLayout.show(mainArea, "chat");
             }, "New Contact");
@@ -104,7 +107,7 @@ public class Main {
                                 node.name = newName;
                                 node.bio = contactProfilePage[0].getContactBio();
                                 node.phone = contactProfilePage[0].getContactPhone();
-                                refreshContactModel();
+                                refreshContactModel(null);
                                 contactList.setSelectedValue(newName, true);
                             }
                         }
@@ -167,11 +170,44 @@ public class Main {
             topPanel.add(leftButtons, BorderLayout.WEST);
             frame.add(topPanel, BorderLayout.NORTH);
 
+            // search bar for contacts
+            JTextField searchField = new JTextField();
+            topPanel.add(searchField, BorderLayout.CENTER);
+
+            searchField.addActionListener(e -> {
+                String text = searchField.getText();
+                refreshContactModel(text);
+            });
+
+            JLabel searchLabel = new JLabel("Search Contacts:");
+
+            JPanel searchPanel = new JPanel(new BorderLayout());
+            searchPanel.add(searchLabel, BorderLayout.WEST);
+            searchPanel.add(searchField, BorderLayout.CENTER);
+
+            topPanel.add(searchPanel, BorderLayout.CENTER);
+
+            // search field for messages
+            JTextField messageSearchField = new JTextField();
+            JLabel messageSearchLabel = new JLabel("Search messages:");
+
+            JPanel messageSearchPanel = new JPanel(new BorderLayout(5, 0));
+            messageSearchPanel.add(messageSearchLabel, BorderLayout.WEST);
+            messageSearchPanel.add(messageSearchField, BorderLayout.CENTER);
+
+            chatPanel.add(messageSearchPanel, BorderLayout.NORTH);
+
+            messageSearchField.addActionListener(e -> {
+                String currentContact = contactList.getSelectedValue();
+                refreshMessages(currentContact, messageSearchField.getText(), messageModel);
+            });
+
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
                     if (!e.getValueIsAdjusting()) {
                         String currentContact = contactList.getSelectedValue();
+                        refreshMessages(currentContact, messageSearchField.getText(), messageModel);
                         messageModel.clear();
                         if (currentContact != null) {
                             ContactLinkedList.Node node = contacts.find(currentContact);
@@ -193,7 +229,7 @@ public class Main {
                     messageModel.addElement(msg.sender() + ": " + msg.text());
                     input.setText("");
                     contacts.moveToHead(currentContact);
-                    refreshContactModel();
+                    refreshContactModel(null);
                     contactList.setSelectedValue(currentContact, true);
                 }
             });
@@ -204,10 +240,12 @@ public class Main {
         });
     }
 
-    private static void refreshContactModel() {
+    private static void refreshContactModel(String filter) {
         contactModel.clear();
         for (String name : contacts.toArray()) {
-            contactModel.addElement(name);
+            if (filter == null || name.toLowerCase().contains(filter.toLowerCase())) {
+                contactModel.addElement(name);
+            }
         }
     }
 
@@ -219,5 +257,26 @@ public class Main {
         contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "Hey! How are you?"));
         contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! How are you?"));
         contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hey! How are you?"));
+    }
+
+    private static void refreshMessages(String contactName, String filter, DefaultListModel<String> messageModel) {
+        messageModel.clear();
+
+        if (contactName == null) {
+            return;
+        }
+
+        ContactLinkedList.Node node = contacts.find(contactName);
+
+        for (Object obj : node.messages) {
+            Message msg = (Message) obj;
+
+            String fullText = msg.sender() + ": " + msg.text();
+
+            if (filter == null || filter.isEmpty()
+                    || fullText.toLowerCase().contains(filter.toLowerCase())) {
+                messageModel.addElement(fullText);
+            }
+        }
     }
 }
