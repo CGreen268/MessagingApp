@@ -258,7 +258,7 @@ public class Main {
                 String currentContact = contactList.getSelectedValue();
                 String text = input.getText().trim();
                 if (currentContact != null && !text.isEmpty()) {
-                    Message msg = new Message("You", text, false, getCurrentTime());
+                    Message msg = new Message("You", text, false);
                     contacts.find(currentContact).messages.add(msg);
                     messageModel.addElement(msg.sender() + ": " + msg.text());
                     input.setText("");
