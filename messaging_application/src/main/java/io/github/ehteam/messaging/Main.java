@@ -258,7 +258,7 @@ public class Main {
                 String currentContact = contactList.getSelectedValue();
                 String text = input.getText().trim();
                 if (currentContact != null && !text.isEmpty()) {
-                    Message msg = new Message("You", text);
+                    Message msg = new Message("You", text, false, getCurrentTime());
                     contacts.find(currentContact).messages.add(msg);
                     messageModel.addElement(msg.sender() + ": " + msg.text());
                     input.setText("");
@@ -288,15 +288,15 @@ public class Main {
         contacts.addToTail("Bob Smith");
         contacts.addToTail("Jeffrey Lee");
 
-        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "Hi, Where is my money!!"));
-        contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! I saw you in your bedroom the other day while I was walking my fish"));
-        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hello, Just wanted to let you know that your rent is overdue, please get it to me by the end of the week or I'll have to send the eviction notice."));
-        contacts.find("Alice Johnson").messages.add(new Message("You", "I'm really sorry, I've been working extra shifts at the cheese & cake factory but my boss has been refusing to pay me for the extra hours. I'm trying to get it sorted but it's been a nightmare."));
-        contacts.find("Bob Smith").messages.add(new Message("You", "Hell yeah dude, I was so embarrassed when I saw you, I thought I was the only one who did that, but when i saw you I was like 'oh thank god, I'm not the only one!'"));
-        contacts.find("Jeffrey Lee").messages.add(new Message("You", "I hate this stupid flat, the other day some guy was spying on me through my bedroom window!! My boss has been refusing to pay me for extra hours. "));
-        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "That's not good enough! You need to find the money and get it to me immediately or I'm going to have to take action!"));
-        contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Yeah man, I was just wondering what you were up to the other day, I saw lots of flashing lights and couldnt figure out what you were doing. Was there a rave in your bedroom that I wasn't invited to??"));
-        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Listen, I don't care what your excuses are, you need to get the rent to me ASAP, I reccomend you start a side hustle or something to make the money faster, I heard that people are making good money running a small online foot-focused venture, if you catch my drift."));
+        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "Hi, Where is my money!!", true, "10:00 AM"));
+        contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! I saw you in your bedroom the other day while I was walking my fish", true, "10:05 AM"));
+        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hello, Just wanted to let you know that your rent is overdue, please get it to me by the end of the week or I'll have to send the eviction notice.", true, "10:10 AM"));
+        contacts.find("Alice Johnson").messages.add(new Message("You", "I'm really sorry, I've been working extra shifts at the cheese & cake factory but my boss has been refusing to pay me for the extra hours. I'm trying to get it sorted but it's been a nightmare.", true, "10:15 AM"));
+        contacts.find("Bob Smith").messages.add(new Message("You", "Hell yeah dude, I was so embarrassed when I saw you, I thought I was the only one who did that, but when i saw you I was like 'oh thank god, I'm not the only one!'", true, "10:20 AM"));
+        contacts.find("Jeffrey Lee").messages.add(new Message("You", "I hate this stupid flat, the other day some guy was spying on me through my bedroom window!! My boss has been refusing to pay me for extra hours.", true, "10:25 AM"));
+        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "That's not good enough! You need to find the money and get it to me immediately or I'm going to have to take action!", true, "10:30 AM"));
+        contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Yeah man, I was just wondering what you were up to the other day, I saw lots of flashing lights and couldnt figure out what you were doing. Was there a rave in your bedroom that I wasn't invited to??", true, "10:35 AM"));
+        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Listen, I don't care what your excuses are, you need to get the rent to me ASAP, I reccomend you start a side hustle or something to make the money faster, I heard that people are making good money running a small online foot-focused venture, if you catch my drift.", true, "10:40 AM"));
     }
 
     private static void refreshMessages(String contactName, String filter, DefaultListModel<String> messageModel) {
