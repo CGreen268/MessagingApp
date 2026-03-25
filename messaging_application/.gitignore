@@ -1,0 +1,15 @@
+# Environment variables
+.env
+
+# Compiled files
+*.class
+*.jar
+
+# Build folders
+target/
+build/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
