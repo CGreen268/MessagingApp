@@ -128,6 +128,8 @@ public class Main {
                     ContactLinkedList.Node node = contacts.find(name);
                     node.bio = profilePage[0].getContactBio();
                     node.phone = profilePage[0].getContactPhone();
+                    // Send an initial message from the new contact
+                    node.messages.add(new Message(name, "Hello, my name is " + name, true));
                     refreshContactModel(null);
                 }
                 cardLayout.show(mainArea, "chat");
