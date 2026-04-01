@@ -61,11 +61,26 @@ public class Main {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            initializeConversations();
+            DataManager.AppData saved = DataManager.loadAll();
+            if (saved != null) {
+                contacts = saved.contacts;
+                userProfileName = saved.userName;
+                userProfileBio = saved.userBio;
+                userProfilePhone = saved.userPhone;
+            } else {
+                initializeConversations();
+            }
 
             DefaultListModel<String> messageModel = new DefaultListModel<>();
 
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    DataManager.saveAll(contacts, userProfileName, userProfileBio, userProfilePhone);
+                    System.exit(0);
+                }
+            });
             frame.setSize(600, 400);
             frame.setLayout(new BorderLayout());
 
@@ -128,7 +143,7 @@ public class Main {
             userProfilePanel.add(userBackButton, BorderLayout.NORTH);
             userProfilePanel.add(userProfilePage[0], BorderLayout.CENTER);
 
-// Contact profile page
+            // Contact profile page
             ContactProfile[] contactProfilePage = new ContactProfile[1];
             contactProfilePage[0] = new ContactProfile(
                     () -> {
@@ -248,7 +263,8 @@ public class Main {
                             for (Object obj : node.messages) {
                                 Message msg = (Message) obj;
                                 String readStatus = msg.isRead() ? "✓ Read" : "● Unread";
-                                messageModel.addElement("[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")");
+                                messageModel.addElement("[" + msg.time() + "] " + msg.sender() + ": " + msg.text()
+                                        + "  (" + readStatus + ")");
                             }
                         }
                     }
@@ -261,8 +277,9 @@ public class Main {
                 if (currentContact != null && !text.isEmpty()) {
                     Message msg = new Message("You", text, false);
                     contacts.find(currentContact).messages.add(msg);
-                    String readStatus = msg.isRead() ? "✓ Read" : "● Unread";
-                    messageModel.addElement("[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")");
+                    String readStatus = msg.isRead() ? "Read" : "Unread";
+                    messageModel.addElement(
+                            "[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")");
                     input.setText("");
                     contacts.moveToHead(currentContact);
                     refreshContactModel(null);
@@ -290,15 +307,31 @@ public class Main {
         contacts.addToTail("Bob Smith");
         contacts.addToTail("Jeffrey Lee");
 
-        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "Hi, Where is my money!!", true, "10:00 AM"));
-        contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Hey! I saw you in your bedroom the other day while I was walking my fish", true, "10:05 AM"));
-        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Hello, Just wanted to let you know that your rent is overdue, please get it to me by the end of the week or I'll have to send the eviction notice.", true, "10:10 AM"));
-        contacts.find("Alice Johnson").messages.add(new Message("You", "I'm really sorry, I've been working extra shifts at the cheese & cake factory but my boss has been refusing to pay me for the extra hours. I'm trying to get it sorted but it's been a nightmare.", true, "10:15 AM"));
-        contacts.find("Bob Smith").messages.add(new Message("You", "Hell yeah dude, I was so embarrassed when I saw you, I thought I was the only one who did that, but when i saw you I was like 'oh thank god, I'm not the only one!'", true, "10:20 AM"));
-        contacts.find("Jeffrey Lee").messages.add(new Message("You", "I hate this stupid flat, the other day some guy was spying on me through my bedroom window!! My boss has been refusing to pay me for extra hours.", true, "10:25 AM"));
-        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson", "That's not good enough! You need to find the money and get it to me immediately or I'm going to have to take action!", true, "10:30 AM"));
-        contacts.find("Bob Smith").messages.add(new Message("Bob Smith", "Yeah man, I was just wondering what you were up to the other day, I saw lots of flashing lights and couldnt figure out what you were doing. Was there a rave in your bedroom that I wasn't invited to??", true, "10:35 AM"));
-        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee", "Listen, I don't care what your excuses are, you need to get the rent to me ASAP, I reccomend you start a side hustle or something to make the money faster, I heard that people are making good money running a small online foot-focused venture, if you catch my drift.", true, "10:40 AM"));
+        contacts.find("Alice Johnson").messages
+                .add(new Message("Alice Johnson", "Hi, Where is my money!!", true, "10:00 AM"));
+        contacts.find("Bob Smith").messages.add(new Message("Bob Smith",
+                "Hey! I saw you in your bedroom the other day while I was walking my fish", true, "10:05 AM"));
+        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee",
+                "Hello, Just wanted to let you know that your rent is overdue, please get it to me by the end of the week or I'll have to send the eviction notice.",
+                true, "10:10 AM"));
+        contacts.find("Alice Johnson").messages.add(new Message("You",
+                "I'm really sorry, I've been working extra shifts at the cheese & cake factory but my boss has been refusing to pay me for the extra hours. I'm trying to get it sorted but it's been a nightmare.",
+                true, "10:15 AM"));
+        contacts.find("Bob Smith").messages.add(new Message("You",
+                "Hell yeah dude, I was so embarrassed when I saw you, I thought I was the only one who did that, but when i saw you I was like 'oh thank god, I'm not the only one!'",
+                true, "10:20 AM"));
+        contacts.find("Jeffrey Lee").messages.add(new Message("You",
+                "I hate this stupid flat, the other day some guy was spying on me through my bedroom window!! My boss has been refusing to pay me for extra hours.",
+                true, "10:25 AM"));
+        contacts.find("Alice Johnson").messages.add(new Message("Alice Johnson",
+                "That's not good enough! You need to find the money and get it to me immediately or I'm going to have to take action!",
+                true, "10:30 AM"));
+        contacts.find("Bob Smith").messages.add(new Message("Bob Smith",
+                "Yeah man, I was just wondering what you were up to the other day, I saw lots of flashing lights and couldnt figure out what you were doing. Was there a rave in your bedroom that I wasn't invited to??",
+                true, "10:35 AM"));
+        contacts.find("Jeffrey Lee").messages.add(new Message("Jeffrey Lee",
+                "Listen, I don't care what your excuses are, you need to get the rent to me ASAP, I reccomend you start a side hustle or something to make the money faster, I heard that people are making good money running a small online foot-focused venture, if you catch my drift.",
+                true, "10:40 AM"));
     }
 
     private static void refreshMessages(String contactName, String filter, DefaultListModel<String> messageModel) {
@@ -317,7 +350,7 @@ public class Main {
             if (msg.isRead()) {
                 readStatus = "Read";
             }
-            
+
             String fullText = "[" + msg.time() + "] " + msg.sender() + ": " + msg.text() + "  (" + readStatus + ")";
 
             if (filter == null || filter.isEmpty()
