@@ -22,10 +22,12 @@ public class ProfilePage extends JPanel {
     private JTextArea bioField;
     private JTextField phoneField;
 
+    // Constructor for creating new profile with default title
     public ProfilePage(Runnable onSave) {
         this(onSave, "New Contact");
     }
 
+    // Constructor for editing existing profile with custom title
     public ProfilePage(Runnable onSave, String title) {
         setLayout(new BorderLayout());
 
@@ -50,6 +52,7 @@ public class ProfilePage extends JPanel {
 
         add(form, BorderLayout.CENTER);
 
+        // Save button to update profile information
         JButton saveBtn = new JButton("Save");
         saveBtn.addActionListener(e -> {
             displayName = nameField.getText();
@@ -58,17 +61,20 @@ public class ProfilePage extends JPanel {
             onSave.run();
         });
 
+        // Panel to hold the save button at the bottom
         JPanel bottom = new JPanel();
         bottom.add(saveBtn);
         add(bottom, BorderLayout.SOUTH);
     }
 
+    // Method to clear all input fields, useful for resetting the form when creating a new profile
     public void clearFields() {
         nameField.setText("");
         bioField.setText("");
         phoneField.setText("");
     }
 
+    // Getters and setters for profile information
     public String getDisplayName() {
         return nameField.getText().trim();
     }
