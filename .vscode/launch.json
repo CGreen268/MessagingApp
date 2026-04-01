@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run Main",
+      "request": "launch",
+      "mainClass": "io.github.ehteam.messaging.Main",
+      "env": {
+        "_JAVA_AWT_WM_NONREPARENTING": "1",
+        "GDK_BACKEND": "x11"
+      },
+      "vmArgs": "-Dsun.java2d.xrender=false"
+    }
+  ]
+}
