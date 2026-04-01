@@ -12,6 +12,7 @@ public class ContactLinkedList {
     public List<Object> messages;
     public Node next;
 
+    // Constructor for a new contact with just a name
     public Node(String name) {
         this.name = name;
         this.bio = "";
@@ -23,6 +24,7 @@ public class ContactLinkedList {
     private Node head;
     private int size;
 
+    // Adds a new contact to the end of the list
     public void addToTail(String name) {
         Node newNode = new Node(name);
         if (head == null) {
@@ -37,6 +39,7 @@ public class ContactLinkedList {
         size++;
     }
 
+    // Moves the contact given to the head of the list
     public void moveToHead(String name) {
         if (head == null || head.name.equals(name)) {
             return;
@@ -59,6 +62,7 @@ public class ContactLinkedList {
         head = cur;
     }
 
+    // Finds and returns the node with the given name
     public Node find(String name) {
         Node cur = head;
         while (cur != null) {
@@ -70,6 +74,7 @@ public class ContactLinkedList {
         return null;
     }
 
+    // Removes the contact with the given name
     public void remove(String name) {
         if (head == null) {
             return;
@@ -94,14 +99,17 @@ public class ContactLinkedList {
         }
     }
 
+    // Gets the head of the linked list
     public Node getHead() {
         return head;
     }
 
+    // Returns the number of contacts in the list
     public int size() {
         return size;
     }
 
+    // Converts the linked list of contacts to an array of contact names
     public String[] toArray() {
         String[] result = new String[size];
         Node cur = head;
