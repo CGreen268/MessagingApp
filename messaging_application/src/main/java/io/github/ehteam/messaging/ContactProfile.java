@@ -12,20 +12,24 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+// Panel used to view and edit a contacts profile
 public class ContactProfile extends JPanel {
 
+    // Form fields shown on the profile screen
     private JTextField nameField;
     private JTextField usernameField;
     private JTextArea bioField;
     private JTextField phoneField;
 
     public ContactProfile(Runnable onSave, Runnable onCancel) {
+        // Main panel layout
         setLayout(new BorderLayout());
 
         JLabel title = new JLabel("Contact Profile", SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 16));
         add(title, BorderLayout.NORTH);
 
+        // Form layout
         JPanel form = new JPanel(new GridLayout(0, 2, 10, 10));
 
         nameField = new JTextField();
@@ -43,6 +47,7 @@ public class ContactProfile extends JPanel {
 
         add(form, BorderLayout.CENTER);
 
+        // Save and cancel button actions
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
 
@@ -55,12 +60,14 @@ public class ContactProfile extends JPanel {
         add(bottom, BorderLayout.SOUTH);
     }
 
+    // Loads the selected contact data into the form fields
     public void loadContact(ContactLinkedList.Node node) {
         nameField.setText(node.name);
         bioField.setText(node.bio);
         phoneField.setText(node.phone);
     }
 
+    // Returns trimmed values entered in the form
     public String getContactName()     { return nameField.getText().trim(); }
     public String getContactBio()      { return bioField.getText().trim(); }
     public String getContactPhone()    { return phoneField.getText().trim(); }

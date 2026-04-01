@@ -6,7 +6,7 @@ public class DataManager {
 
     private static final String FILE_PATH = "data.txt";
 
-    // ── Save ──────────────────────────────────────────────────────────────────
+    // Saving
 
     public static void saveAll(ContactLinkedList contacts,
                                String userName, String userBio, String userPhone) {
@@ -48,7 +48,7 @@ public class DataManager {
         }
     }
 
-    // ── Load ──────────────────────────────────────────────────────────────────
+    // Loading
 
     public static AppData loadAll() {
         File file = new File(FILE_PATH);
@@ -93,7 +93,7 @@ public class DataManager {
         }
     }
 
-    // ── Data holder ───────────────────────────────────────────────────────────
+    // App Data Class
 
     public static class AppData {
         public final ContactLinkedList contacts;
