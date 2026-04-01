@@ -1,5 +1,6 @@
 package io.github.ehteam.messaging;
 
+// import statements
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -18,6 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+// Renderer so long chat text wraps correctly in the message list.
 class WrappingListCellRenderer extends DefaultListCellRenderer {
     private JTextArea textArea;
 
@@ -49,6 +51,7 @@ class WrappingListCellRenderer extends DefaultListCellRenderer {
 
 public class Main {
 
+    // Initialise UI frame and contact/message data structures
     private static ContactLinkedList contacts = new ContactLinkedList();
     private static DefaultListModel<String> contactModel = new DefaultListModel<>();
     private static JList<String> contactList = new JList<>();
@@ -60,7 +63,9 @@ public class Main {
     private static String userProfilePhone = "+1 555 123 4567";
 
     public static void main(String[] args) {
+        // Build and show the Swing UI
         SwingUtilities.invokeLater(() -> {
+            // Load saved app data, and load hardcoded data if no saved data found
             DataManager.AppData saved = DataManager.loadAll();
             if (saved != null) {
                 contacts = saved.contacts;
@@ -73,6 +78,7 @@ public class Main {
 
             DefaultListModel<String> messageModel = new DefaultListModel<>();
 
+            // Save data on close before exiting
             frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             frame.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
@@ -89,16 +95,19 @@ public class Main {
 
             JPanel chatPanel = new JPanel(new BorderLayout());
 
+            // Left side contact list
             contactList.setModel(contactModel);
             refreshContactModel(null);
             frame.add(new JScrollPane(contactList), BorderLayout.WEST);
 
+            // Show messages for selected contact
             JList<String> chats = new JList<>();
             chats.setModel(messageModel);
             chats.setCellRenderer(new WrappingListCellRenderer());
             chats.setFixedCellHeight(-1);
             chatPanel.add(new JScrollPane(chats), BorderLayout.CENTER);
 
+            // Bottom input area for sending new messages
             JTextField input = new JTextField();
             JButton sendButton = new JButton("Send");
             JTextField sendLabel = new JTextField("Send Message");
@@ -110,15 +119,15 @@ public class Main {
 
             chatPanel.add(inputPanel, BorderLayout.SOUTH);
 
-            // New Contact profile page
+            // New contact page
             ProfilePage[] profilePage = new ProfilePage[1];
             profilePage[0] = new ProfilePage(() -> {
                 String name = profilePage[0].getDisplayName();
                 if (!name.isEmpty() && contacts.find(name) == null) {
                     contacts.addToTail(name);
                     ContactLinkedList.Node node = contacts.find(name);
-                    node.bio = profilePage[0].getContactBio(); // ← add this
-                    node.phone = profilePage[0].getContactPhone(); // ← add this
+                    node.bio = profilePage[0].getContactBio();
+                    node.phone = profilePage[0].getContactPhone();
                     refreshContactModel(null);
                 }
                 cardLayout.show(mainArea, "chat");
@@ -130,10 +139,10 @@ public class Main {
             profilePanel.add(backButton, BorderLayout.NORTH);
             profilePanel.add(profilePage[0], BorderLayout.CENTER);
 
-            // User's own profile page
+            // User profile page
             ProfilePage[] userProfilePage = new ProfilePage[1];
             userProfilePage[0] = new ProfilePage(() -> {
-                // Save user's own profile
+                // Save button to update user's own profile details
                 userProfileName = userProfilePage[0].getDisplayName();
                 userProfileBio = userProfilePage[0].getContactBio();
                 userProfilePhone = userProfilePage[0].getContactPhone();
@@ -146,11 +155,11 @@ public class Main {
             userProfilePanel.add(userBackButton, BorderLayout.NORTH);
             userProfilePanel.add(userProfilePage[0], BorderLayout.CENTER);
 
-            // Contact profile page
+            // Existing contact profile page for viewing/editing contact details
             ContactProfile[] contactProfilePage = new ContactProfile[1];
             contactProfilePage[0] = new ContactProfile(
                     () -> {
-                        // Save button — update the node's details
+                        // Save button to update selected contact details
                         String selected = contactList.getSelectedValue();
                         if (selected != null) {
                             ContactLinkedList.Node node = contacts.find(selected);
@@ -178,6 +187,7 @@ public class Main {
 
             frame.add(mainArea, BorderLayout.CENTER);
 
+            // Buttons at the top for adding/removing contacts, searching, and viewing profile
             JButton newContactBtn = new JButton("New Contact");
             JButton removeContactBtn = new JButton("Remove Contact");
             JButton viewContactBtn = new JButton("View Profile");
@@ -196,6 +206,7 @@ public class Main {
                 }
             });
 
+            // Load selected contact's details into profile page for viewing/editing when "View Profile" button is clicked
             viewContactBtn.addActionListener(e -> {
                 String selected = contactList.getSelectedValue();
                 if (selected != null) {
@@ -222,7 +233,7 @@ public class Main {
             topPanel.add(leftButtons, BorderLayout.WEST);
             frame.add(topPanel, BorderLayout.NORTH);
 
-            // search bar for contacts
+            // Contact search bar
             JTextField searchField = new JTextField();
             topPanel.add(searchField, BorderLayout.CENTER);
 
@@ -239,7 +250,7 @@ public class Main {
 
             topPanel.add(searchPanel, BorderLayout.CENTER);
 
-            // search field for messages
+            // Message search bar
             JTextField messageSearchField = new JTextField();
             JLabel messageSearchLabel = new JLabel("Search messages:");
 
@@ -254,6 +265,7 @@ public class Main {
                 refreshMessages(currentContact, messageSearchField.getText(), messageModel);
             });
 
+            // Reload messages when selected contact changes
             contactList.addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -274,6 +286,7 @@ public class Main {
                 }
             });
 
+            // Send a new message to the selected contact
             sendButton.addActionListener(e -> {
                 String currentContact = contactList.getSelectedValue();
                 String text = input.getText().trim();
@@ -290,12 +303,14 @@ public class Main {
                 }
             });
 
+            // Pressing Enter sends a message
             input.addActionListener(e -> sendButton.doClick());
 
             frame.setVisible(true);
         });
     }
 
+    // Refresh contact list with optional name filter
     private static void refreshContactModel(String filter) {
         contactModel.clear();
         for (String name : contacts.toArray()) {
@@ -305,6 +320,7 @@ public class Main {
         }
     }
 
+    // Sample contacts and messages for initial launch
     private static void initializeConversations() {
         contacts.addToTail("Alice Johnson");
         contacts.addToTail("Bob Smith");
@@ -337,6 +353,7 @@ public class Main {
                 true, "10:40 AM"));
     }
 
+    // Refresh message list for selected contact with optional text filter
     private static void refreshMessages(String contactName, String filter, DefaultListModel<String> messageModel) {
         messageModel.clear();
 
