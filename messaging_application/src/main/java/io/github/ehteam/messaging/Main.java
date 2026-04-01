@@ -116,6 +116,9 @@ public class Main {
                 String name = profilePage[0].getDisplayName();
                 if (!name.isEmpty() && contacts.find(name) == null) {
                     contacts.addToTail(name);
+                    ContactLinkedList.Node node = contacts.find(name);
+                    node.bio = profilePage[0].getContactBio(); // ← add this
+                    node.phone = profilePage[0].getContactPhone(); // ← add this
                     refreshContactModel(null);
                 }
                 cardLayout.show(mainArea, "chat");
